@@ -58,7 +58,6 @@ class EventTestCase(TestCase):
                         temp = str(temp)
                         resp['created_at'] = temp
                 self.assertEqual(response, row['response']['body'])
-
     def test_get_events_by_actor_id(self):
         client = RequestsClient()
         for ro in self.test_2:
