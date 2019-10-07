@@ -138,6 +138,10 @@ class EventTestCase(TestCase):
                     res.headers['Content-Type'], row['response']['headers']['Content-Type'])
             if row['response']['body'] != {}:
                 response = json.loads(res.text)
+                with open('actual.json', 'w+') as actual:
+                    print(response, file=actual)
+                with open('expected.json', 'w+') as expected:
+                    print(row['response']['body'], file=expected)
                 self.assertEqual(response, row['response']['body'])
 
     def test_get_actors_by_streak(self):
