@@ -2,8 +2,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.views.generic.base import RedirectView
-from RestAPI.views import (delete_all_events, GetPostEventView,
-                           GetEventByActor, get_events_by_actor_id)
+from RestAPI.views import (delete_all_events, GetPostEventView
+                        , get_events_by_actor_id)
 
 urlpatterns = [
     # Dummy route. Can be removed.
