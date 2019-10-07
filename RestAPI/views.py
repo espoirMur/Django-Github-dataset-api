@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from rest_framework import generics
-from .models import Event, Actor, Repo
+from .models import Event
 from .serializers import EventSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.shortcuts import get_object_or_404
-from rest_framework.status import HTTP_200_OK
+from rest_framework import status
 
 '''
 The endpoints we are looking for :
@@ -25,12 +24,13 @@ The endpoints we are looking for :
 @api_view(["DELETE"])
 def delete_all_events(request):
     Event.objects.all().delete()
-    return Response(status=HTTP_200_OK)
+    return Response(status=status.HTTP_200_OK)
 
 
 class GetPostEventView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
 
 """
 @api_view(['GET'])
