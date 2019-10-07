@@ -15,11 +15,10 @@ class Repo(models.Model):
     url = models.URLField(max_length=200)
 
 # update actor can have many events
-
 class Event(models.Model):
     id = models.IntegerField(primary_key=True, db_index=True)
     type = models.CharField(max_length=50, null=False)
-    created_at = models.DateTimeField(required=True)
+    created_at = models.DateTimeField(null=False)
     actor = models.ForeignKey(
         Actor,
         on_delete=models.CASCADE,

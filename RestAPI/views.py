@@ -9,9 +9,6 @@ from rest_framework import status
 
 '''
 The endpoints we are looking for :
-    - Erasing all the events
-    - Adding new events
-    - Returning all the events
     - Returning the event records filtered by the actor ID
     - Updating the avatar URL of the actor
     - turning the actor records ordered by the total number of event
