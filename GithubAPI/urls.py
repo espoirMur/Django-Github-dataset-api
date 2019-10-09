@@ -9,8 +9,8 @@ from RestAPI.views import (delete_all_events,
 urlpatterns = [
     # Dummy route. Can be removed.
     url(r'^admin/', admin.site.urls),
-    url(r'^erase/', delete_all_events, name='delete-all'),
+    url(r'^erase/$', delete_all_events, name='delete-all'),
     url(r'^events/', include('RestAPI.urls')),
-    url(r'^actors/', ActorView.as_view()),
-    #url(r'^actors/streak', get_actors_by_longest_streak)
+    url(r'^actors/$', ActorView.as_view()),
+    url(r'^actors/streak/', get_actors_by_longest_streak)
 ]

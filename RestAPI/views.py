@@ -91,25 +91,42 @@ def dictfetchall(query):
         ]
 
 
+raw_query = '''
+    select actor_id, max(created_at) as date, count(*) as streak, login, avatar_url
+    from (select actor_id, t1.created_at, login, avatar_url
+      ,date(t1.created_at,-(select count(*) 
+      from  RestAPI_event t2 
+      where t2.actor_id = t1.actor_id 
+      and t2.created_at<=t1.created_at)||' day') as grp
+      from  RestAPI_event t1 inner join RestAPI_actor on t1.actor_id = RestAPI_actor.id) t
+      group by actor_id
+    '''
+
 @api_view(['GET'])
 def get_actors_by_longest_streak(request):
-    raw_query = '''
-    select RestAPI_actor.id,
-           RestAPI_actor.login,
-           RestAPI_actor.avatar_url,
-           count(*) as streak,
-           min RestAPI_event.created_at as from_date,
-           max RestAPI_event.created_at  as to_date
-           from (select RestAPI_event.created_at,
-                 RestAPI_event.actor_id,
-                 row_number() over 
-                 (partition by RestAPI_event.actor_id order by RestAPI_event.created_at)
-                  as seqnum
-                  from RestAPI_actor
-                  inner join RestAPI_event
-                  on RestAPI_event.actor_id = RestAPI_actor.id
-           ) RestAPI_event.actor
-           group by RestAPI_event.actor_id, ( RestAPI_event.created_at - seqnum)
+    raw_query_1 = '''
+    SELECT actor_id as id,
+            login,
+           avatar_url,
+    MIN(created_at) as start_date, 
+    MAX(created_at) as end_date, 
+    COUNT(*) as streak 
+  from (select actor_id,
+           created_at,
+           login,
+           avatar_url,
+           (select count(*)
+           from RestAPI_event EventsR
+          where EventsR.actor_id = Events.actor_id 
+           and  EventsR.created_at <= Events.created_at
+            ) as event_group
+            from RestAPI_event Events
+            inner join RestAPI_actor on Events.actor_id = RestAPI_actor.id) A
+            GROUP BY actor_id
+            ORDER BY streak desc,
+                     end_date desc,
+                     login desc
                 '''
-    actors = dictfetchall(raw_query)
+    
+    actors = dictfetchall(raw_query_1)
     return Response(actors)
