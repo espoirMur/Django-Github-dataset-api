@@ -118,7 +118,7 @@ def get_actors_by_longest_streak(request):
            (select count(*)
            from RestAPI_event EventsR
           where EventsR.actor_id = Events.actor_id 
-           and  EventsR.created_at <= Events.created_at
+           and  EventsR.created_at >= date(Events.created_at)
             ) as event_group
             from RestAPI_event Events
             inner join RestAPI_actor on Events.actor_id = RestAPI_actor.id) A
@@ -128,5 +128,6 @@ def get_actors_by_longest_streak(request):
                      login desc
                 '''
     
-    actors = dictfetchall(raw_query_1)
-    return Response(actors)
+    actors = Actor.objects.raw(raw_query_1)
+    serializer = ActorSerializer(actors, many=True)
+    return Response(serializer.data)
