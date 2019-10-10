@@ -60,12 +60,10 @@ The REST service should implement the following functionalities:
 
 ## Dependencies
 
-    - python3.7
-    - python3
+    - python3.6
     - pip3
-    - django 2.2.1
-    - celery
-    - redis
+    - Django 1.11.5
+    - djangorestframework 3.6.4
 
 ## Getting Started
 The project by default supports the use of SQLite3 database.
