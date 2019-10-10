@@ -110,14 +110,14 @@ def get_actors_by_longest_streak(request):
            avatar_url,
     MIN(created_at) as start_date, 
     MAX(created_at) as end_date, 
-    COUNT(*) as streak 
+    COUNT (*) as streak 
   from (select actor_id,
            created_at,
            login,
            avatar_url,
            (select count(*)
            from RestAPI_event EventsR
-          where EventsR.actor_id = Events.actor_id 
+          where EventsR.actor_id <> Events.actor_id
            and  EventsR.created_at >= date(Events.created_at)
             ) as event_group
             from RestAPI_event Events
@@ -127,7 +127,7 @@ def get_actors_by_longest_streak(request):
                      end_date desc,
                      login desc
                 '''
-    
-    actors = Actor.objects.raw(raw_query_1)
-    serializer = ActorSerializer(actors, many=True)
-    return Response(serializer.data)
+    return Response(dictfetchall(raw_query_1))
+    #actors = Actor.objects.raw(raw_query_1)
+    #serializer = ActorSerializer(actors, many=True)
+    #return Response(serializer.data)
